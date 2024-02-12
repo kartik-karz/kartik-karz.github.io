@@ -1,0 +1,31 @@
+base_url = "https://kartikkulkarni.me"
+
+compile_sass = true
+
+build_search_index = true
+
+theme = "after-dark"
+paginate_by = 5
+generate_feed = true
+
+taxonomies = [
+    {name = "categories", feed = true},
+    {name = "tags", feed = true},
+]
+
+[markdown]
+highlight_code = true
+
+[extra]
+
+after_dark_menu = [
+    {url = "$BASE_URL", name = "Home"},
+    {url = "$BASE_URL/categories", name = "Categories"},
+    {url = "$BASE_URL/tags", name = "Tags"},
+    {url = "$BASE_URL/portfolio", name = "Portfolio"},
+]
+
+after_dark_title = "Kartik's Journey"
+
+author = "Kartik Kulkarni"
+
