@@ -69,12 +69,10 @@ by using the filter
 ```bash 
 bthci_evt.bd_addr == ab:cd:ef:ab:cd:ef
 ```
-![wireshark](../images/wireshark_btsoop.png)
 with appropriate macaddress for your device.
 Each of the frames captured were 60 bytes but for us only the data block under the advertising data payload
 is essential which is about 17 nibbles. 
 
-![wireshark](../images/wireshark.png)
 ## Decoding the hex
 
 The next step is for us to identify what those binary encoded data mean. The hexdump of the frame looks like this
