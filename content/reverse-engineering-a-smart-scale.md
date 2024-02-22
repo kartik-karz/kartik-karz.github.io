@@ -10,7 +10,7 @@ categories = ["Hacking"]
 ### Background
 One thing I hate more than anything with devices these days are how
 annoying they can be in terms of providing a simple functionality without
-login, android has such a brilliant way of storing your data locally that
+login. Android has such a brilliant way of storing your data locally that
 I think pretty much anything can be stored here without having to resort to 
 email or god forbid one click login from fb, google, apple and what not.
 
@@ -44,28 +44,40 @@ disconnect all other bluetooth devices near you if you can (both connected to ph
 and then open the dreadful app. Since the app required internet and I connected to my debug wifi network
 without any devices and logged into the app with some temporary email. Just as I stepped on the scale
 I could see the app automatically update the screen which could only mean that the device doesn't require
-pairing and is just based on bluetooth low-energy advertising mode to send packets everywhere whenever the 
-device is stepped on. That saves us a great deal of effort in figuring out the pairing mode.
+any pairing and it's just based on bluetooth low-energy advertising mode to send packets whenever the 
+device is stepped on. That saves us a great deal of effort by not having to figure out the pairing mode.
+
 I stepped on the scale a few times and then closed bluetooth, disabled the hci snoop logging and attempted
-to get the captured bluetooth frames to my laptop. My usual approach when I had used previously was just running 
-```bash adb pull /sdcard/btsnoop_hci.log``` with usb debugging mode but it seems that google has stopped 
+to get the captured bluetooth frames to my laptop. My approach when I had used this previously was just running 
+```bash
+adb pull /sdcard/btsnoop_hci.log
+```
+ with usb debugging mode but it seems that google has stopped 
 storing the logs there for pixel devices and I had to go to developer setting on my phone again, start
 the bug report (full report not required just the interactive one is okay) and wait for the zip file
-to be created and then copied file from the zip file at `FS/data/misc/bluetooth/logs/btsnoop_hci.log`
+to be created and then copied file from the zip file at 
+```bash
+FS/data/misc/bluetooth/logs/btsnoop_hci.log
+```
 to my laptop.
 
 Opening this file on wireshark revealed the many packets that were captured during the few minutes
 that the logging was on. Luckily for us the weighing scale app had an info page which displayed the
 bluetooth hardware mac address when it first received the advertisement packet and finding the packets 
 from the packet dump was as simple as finding this macaddress in wireshark. This can be simplified 
-by using the filter `bthci_evt.bd_addr == ab:cd:ef:ab:cd:ef` with appropriate macaddress for your device.
-
+by using the filter 
+```bash 
+bthci_evt.bd_addr == ab:cd:ef:ab:cd:ef
+```
+![wireshark](../images/wireshark_btsoop.png)
+with appropriate macaddress for your device.
 Each of the frames captured were 60 bytes but for us only the data block under the advertising data payload
 is essential which is about 17 nibbles. 
 
+![wireshark](../images/wireshark.png)
 ## Decoding the hex
 
-The next step is for us to identify what those binary encoded data mean. The hexdump of the packet looks like this
+The next step is for us to identify what those binary encoded data mean. The hexdump of the frame looks like this
 ```bash
 0000:   04 3e 39 0d 01 10 80 00 95 0b 06 01 fb 64 01 00
 0010:   ff 7f cc 00 00 00 00 00 00 00 00 00 1f 02 01 06
@@ -89,9 +101,9 @@ for keeping track of measurement data so we can scratch the last byte off. We no
 # XX marked for no longer considered and ^^ marked for the current consideration
 ```   
 
-The other thing that changed slightly were the byte 19 28. The lowest primitives that works well with weighing 
-system would be unsigned short int which has a size of 2 bytes. So putting 0x1928 in the calculator got me 6440.
-That's my weight multiplied by 100, I knew that the values that I was looking for might not be stored as ieee 754 floats
+The other thing that changed slightly were the byte `19 28`. The lowest primitives that works well with weighing 
+system would be unsigned short int which has a size of 2 bytes. So putting `0x1928` in the calculator got me `6440`.
+That's my weight multiplied by 100, I was expecting that the values that I was looking for might not be stored as IEEE 754 floats
 as many cheap microcontrollers don't support floating point but wasn't expecting it to stored like this, but it sort 
 of makes sense after looking at it from the firmware engineer point of view.
 Just to make sure this was weight and not some random bytes coincidentally adding up to my weight, I recaptured 
@@ -132,8 +144,9 @@ when I have found how it works later.
 
 ## Conclusion
 
-This turned out to be an interesting evening exercise but I still haven't got the fancy graphs that I wanted
-on my homeassistant dashboard whenever I check my weight. I have some ideas and I'll try it out later.
+This turned out to be an interesting evening exercise but sadly I still haven't got the fancy graphs that I wanted
+on my homeassistant dashboard whenever I check my weight. 
+I have some ideas going forward and I'll try it out later.
 
 
 [//]: # (TODO: Write another blog post for capturing this data and adding to ha later)
