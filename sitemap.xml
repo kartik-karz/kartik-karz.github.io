@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://kartikkulkarni.me/</loc>
+    </url>
+    <url>
+        <loc>https://kartikkulkarni.me/categories/</loc>
+    </url>
+    <url>
+        <loc>https://kartikkulkarni.me/categories/hacking/</loc>
+    </url>
+    <url>
+        <loc>https://kartikkulkarni.me/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://kartikkulkarni.me/reverse-engineering-a-smart-scale/</loc>
+        <lastmod>2024-02-24</lastmod>
+    </url>
+    <url>
+        <loc>https://kartikkulkarni.me/tags/</loc>
+    </url>
+    <url>
+        <loc>https://kartikkulkarni.me/tags/bluetooth/</loc>
+    </url>
+</urlset>
